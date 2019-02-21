@@ -1,0 +1,32 @@
+.c {
+    &-search {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+        &__box{
+            margin:55px 0;
+        }
+    }
+
+    &-item {
+        margin: 55px 0;
+    }
+
+    &-item__ {
+        &list {}
+
+        &author {
+            font-style: italic;
+            margin: 10px 0;
+        }
+
+        &name {
+            margin: 10px 0;
+        }
+
+        &content {
+            text-align: justify;
+            margin: 10px 0;
+        }
+    }
+}

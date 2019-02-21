@@ -1,0 +1,32 @@
+.c{
+    &-btn{
+        border-radius: 20px;
+        padding:25px;
+        margin: 20px;
+        background-color: rgb(34, 34, 34);
+        color: #fff;
+        cursor: pointer;
+        display: inline-block;
+        box-sizing: border-box;
+    }
+    &-user__{
+
+
+
+        &login{
+            position: sticky;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            border-bottom: 1px solid rgb(34, 34, 34);
+        }
+        &image{
+            border-radius: 100%;
+            max-width: 70px;
+        }
+        &name{
+            font-size: 20px;
+            margin: 20px;
+        }
+    }
+}
