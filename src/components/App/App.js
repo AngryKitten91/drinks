@@ -1,21 +1,25 @@
 import React, { Component } from "react";
-import "./App.css";
-import List from 'components/List';
+import "./App.scss";
 
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import Auth from 'components/hocs/Auth'
-
-import Login from 'components/Login';
+import List from "components/List";
+import Auth from "components/hocs/Auth";
+import Login from "components/Login";
+import AddNew from "components/AddNew";
 
 class App extends Component {
   render() {
-    const {user} = this.props;
+    const { user } = this.props;
     return (
-      <div className="App">
-       <Login />
-       <List />
-
-      </div>
+      <Router>
+        <div className="App">
+          <Route path="/" component={Login} />
+          <Route path="/list/:Id?" component={List} />
+          <Route exact path="/" component={List} />
+          <Route exact path="/add" component={AddNew} />
+        </div>
+      </Router>
     );
   }
 }

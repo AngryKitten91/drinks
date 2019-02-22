@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import "./List.scss";
 
-
+import { Link } from "react-router-dom";
 import { firestore } from "../../firebase";
 
 class List extends Component {
@@ -40,6 +40,19 @@ class List extends Component {
 
   render() {
     const { items, value } = this.state;
+    const {
+      match: {
+        params: { Id }
+      }
+    } = this.props;
+
+    if (Id && Id !== undefined && items !== undefined) {
+      const item = items.find(({ id }) => {
+        return id === Id;
+      });
+      return <Item value={item}>{0}</Item>;
+      
+    }
 
     return (
       <div>
@@ -53,16 +66,21 @@ class List extends Component {
         </div>
         <div className="c-item__list">
           {items
-            .filter((item,i)=>{
+            .filter((item, i) => {
               const { name } = item;
-              if(i <= 9 && value.length < 3){
+              if (i <= 9 && value.length < 3) {
                 return item;
-              } else if(value.length >= 3){
+              } else if (value.length >= 3) {
                 return name.toLowerCase().includes(value.toLowerCase());
               }
+              return;
             })
             .map((item, i) => {
-              return <Item key={i} value={item} >{i}</Item>;
+              return (
+                <Item info={true} key={i} value={item}>
+                  {i}
+                </Item>
+              );
             })}
         </div>
       </div>
@@ -71,13 +89,33 @@ class List extends Component {
 }
 
 const Item = props => {
-  const { value, children } = props;
-  const { name, content, author } = value;
+  
+  if(props.value === undefined ){
+    return <p>Loading...</p>
+  }
+  const { value, children, info } = props;
+  const { name, content, author, id } = value;
   return (
     <div className="c-item">
-      <h3 className="c-item__name">{children + 1}. {name}</h3>
-      <p className="c-item__author">{author}</p>
+      <h3 className="c-item__name">
+        {children + 1}. {name}
+      </h3>
+      <p className="c-item__author">Author: {author}</p>
       <p className="c-item__content">{content}</p>
+      <div className="c-btn__container">
+      {info && (
+        <Link className="c-btn__item" to={`/list/${id}`}>
+          More info...
+        </Link>
+      )}
+      {!info && (
+        <Link className="c-btn__item" to={`/list`}>
+          Back
+        </Link>
+      )}
+      
+      </div>
+
     </div>
   );
 };
