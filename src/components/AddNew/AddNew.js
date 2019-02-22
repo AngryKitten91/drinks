@@ -13,7 +13,8 @@ class AddNew extends Component {
 
     this.state = {
       err:null,
-      itemSaved: false
+      itemSaved: false,
+      respID:null
     };
   }
 
@@ -24,23 +25,34 @@ class AddNew extends Component {
 
   handleSubmit = () =>{
     const {user:{displayName}} = this.props;
+    const {name, content} = this.state;
+
+    if (name && content) {
+      firestore.collection('drinks')
+      .add(
+        {
+          author:displayName,
+          name,
+          content
+        }
+      )
+      .then(resp => {
+        this.setState({itemSaved:true,
+          respID:resp.id
+        })
+        console.log(resp);
+        
+      })
+      .catch(err => this.setState({err:err}))
+    } else {
+      this.setState({info:'Please fill in all fields'})
+    }
     
-    firestore.collection('drinks')
-    .add(
-      {
-        author:displayName,
-        ...this.state
-      }
-    )
-    .then(resp => {
-      this.setState({itemSaved:true})
-    })
-    .catch(err => this.setState({err:err}))
   }
 
   render() {
     const { user } = this.props;
-    const { err, itemSaved } = this.state;
+    const { err, itemSaved, info, respID } = this.state;
     if (!user) {
       return <Redirect to="/" />;
     } else if (itemSaved){
@@ -51,6 +63,9 @@ class AddNew extends Component {
           <Link className="c-btn__item" to={`/list`}>
             Go back to list...
           </Link>
+          <Link className="c-btn__item" to={`/list/${respID}`}>
+            See added on list...
+          </Link>
         </div>
         </div>
       );
@@ -59,6 +74,7 @@ class AddNew extends Component {
     }
     return (
       <div>
+        {info && <div className="c-info">{info}</div>}
         <h2>Add new recipe</h2>
         <form>
           <p>Name</p>
@@ -78,6 +94,9 @@ class AddNew extends Component {
         </form>
         <div className="c-btn__container">
           <p onClick={this.handleSubmit} className="c-btn__item">Send</p>
+          <Link className="c-btn__item" to={`/list`}>
+            Go back to list...
+          </Link>
         </div>
       </div>
     );
